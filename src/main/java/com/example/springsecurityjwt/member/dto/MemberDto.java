@@ -9,8 +9,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MemberDto {
-    @NotNull
-    private String username;
-    @NotNull
-    private String password;
+
+  @NotNull
+  private String username;
+  @NotNull
+  private String password;
 }

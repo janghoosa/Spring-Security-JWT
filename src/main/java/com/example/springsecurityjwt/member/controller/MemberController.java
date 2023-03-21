@@ -14,10 +14,11 @@ import java.util.List;
 @RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberController {
-    private final MemberService memberService;
 
-    @GetMapping("")
-    public List<Member> getMemberList(Pageable pageable) {
-        return memberService.getMemberList(pageable);
-    }
+  private final MemberService memberService;
+
+  @GetMapping("")
+  public List<Member> getMemberList(Pageable pageable) {
+    return memberService.getMemberList(pageable);
+  }
 }
