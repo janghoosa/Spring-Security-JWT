@@ -22,4 +22,9 @@ public class SecurityConfig {
 
     return http.build();
   }
+
+  @Bean
+  public JwtAuthenticationFilter jwtAuthenticationFilter() {
+    return new JwtAuthenticationFilter();
+  }
 }

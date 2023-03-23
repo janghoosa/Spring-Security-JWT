@@ -6,11 +6,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MemberService /*implements UserDetailsService*/ {
+public class MemberService implements UserDetailsService {
 
   private final MemberRepository memberRepository;
 
@@ -20,12 +24,12 @@ public class MemberService /*implements UserDetailsService*/ {
         .collect(Collectors.toList());
   }
 
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        Member member = memberRepository.findByUsername(username);
-//        if (member == null){
-//            throw new UsernameNotFoundException("Invalid username");
-//        }
-//        return new User(member.getUsername(), member.getPassword(), member.getAuthorities());
-//    }
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    Member member = memberRepository.findByUsername(username);
+    if (member == null) {
+      throw new UsernameNotFoundException("Invalid username");
+    }
+    return new User(member.getUsername(), member.getPassword(), member.getAuthorities());
+  }
 }
