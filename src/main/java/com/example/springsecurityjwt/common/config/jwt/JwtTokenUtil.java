@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtTokenUtil {
 
-  private static final String SECRET_KEY = "secret";
+  private static final String SECRET_KEY = "MTI0MTRzZWNyZXRrZXlpc3NlY3JldDEyMzQxNDEyNGdhZ3dhZ2E=";
   private static final long EXPIRATION_TIME = 86400000;
   private static final byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
   private static final Key key = Keys.hmacShaKeyFor(keyBytes);
@@ -40,7 +40,7 @@ public class JwtTokenUtil {
   }
 
   public String getUsernameFromToken(String token) {
-    return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody()
+    return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody()
         .getSubject();
   }
 
@@ -50,7 +50,7 @@ public class JwtTokenUtil {
   }
 
   private Date getExpirationDateFromToken(String token) {
-    return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody()
+    return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody()
         .getExpiration();
   }
 }
