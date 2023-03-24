@@ -1,8 +1,11 @@
 package com.example.springsecurityjwt.member.entity;
 
 import java.util.Collection;
+import java.util.Collections;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,7 +16,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 
 @Entity
 @Getter
@@ -28,19 +33,16 @@ public class Member implements UserDetails {
   @Column(name = "member_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
   @Column(name = "username")
   private String username;
-
   @Column(name = "password")
   private String password;
-
-  @Column(name = "authority")
-  private String authority;
+  @Enumerated(EnumType.STRING)
+  private Role role;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return null;
+    return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
   }
 
   @Override
@@ -61,5 +63,10 @@ public class Member implements UserDetails {
   @Override
   public boolean isEnabled() {
     return false;
+  }
+
+  public enum Role {
+    ROLE_USER,
+    ROLE_ADMIN
   }
 }
