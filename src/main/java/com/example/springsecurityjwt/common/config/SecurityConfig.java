@@ -1,24 +1,27 @@
 package com.example.springsecurityjwt.common.config;
 
 import com.example.springsecurityjwt.common.config.jwt.JwtAuthenticationFilter;
+import com.example.springsecurityjwt.common.config.jwt.JwtTokenUtil;
+import com.example.springsecurityjwt.member.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-@Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
+  private final JwtTokenUtil jwtTokenUtil;
+  private final MemberService memberService;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.addFilterBefore(
-        new JwtAuthenticationFilter(),
+            new JwtAuthenticationFilter(jwtTokenUtil, memberService),
             BasicAuthenticationFilter.class)
         .csrf().disable()
         .authorizeRequests(
@@ -31,11 +34,6 @@ public class SecurityConfig {
         .permitAll(); // 로그인 페이지는 모든 사용자에게 허용
 
     return http.build();
-  }
-
-  @Bean
-  public BCryptPasswordEncoder encodePassword() {
-    return new BCryptPasswordEncoder();
   }
 
   @Bean
